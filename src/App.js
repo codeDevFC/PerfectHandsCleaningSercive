@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { GlobalStyle } from './styles';
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
+import CallBar from './components/layout/CallBar';
+import HeroSection from './components/sections/HeroSection';
+import ServicesSection from './components/sections/ServicesSection';
+import CoverageSection from './components/sections/CoverageSection';
+import ContactSection from './components/sections/ContactSection';
 
 function App() {
+  // Smooth scrolling for anchor links
+  useEffect(() => {
+    const handleAnchorClick = (e) => {
+      const target = e.target;
+      if (target.tagName.toLowerCase() === 'a' && target.getAttribute('href')?.startsWith('#')) {
+        e.preventDefault();
+        const id = target.getAttribute('href').substring(1);
+        const element = document.getElementById(id);
+        if (element) {
+          window.scrollTo({
+            top: element.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }
+    };
+
+    document.body.addEventListener('click', handleAnchorClick);
+    return () => document.body.removeEventListener('click', handleAnchorClick);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <GlobalStyle />
+      <CallBar />
+      <Header />
+      <main>
+        <HeroSection />
+        <ServicesSection />
+        <CoverageSection />
+        <ContactSection />
+      </main>
+      <Footer />
+    </Router>
   );
 }
 
